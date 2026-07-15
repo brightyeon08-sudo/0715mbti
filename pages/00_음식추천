@@ -1,0 +1,128 @@
+import streamlit as st
+import random
+import time
+
+st.set_page_config(
+    page_title="🍽️ 오늘 뭐 먹지?",
+    page_icon="🎡",
+    layout="centered"
+)
+
+# ---------------- CSS ----------------
+st.markdown("""
+<style>
+.stApp{
+    background: linear-gradient(to bottom,#FFE4EC,#FFF8F9);
+}
+.title{
+    text-align:center;
+    font-size:45px;
+    color:#FF4F87;
+    font-weight:bold;
+}
+.sub{
+    text-align:center;
+    font-size:20px;
+}
+.result{
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    text-align:center;
+    border:3px solid #ff9fc0;
+    box-shadow:2px 2px 15px #ffc8da;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ---------------- 음식 데이터 ----------------
+
+foods = {
+    "🍚 한식":[
+        "🍚 비빔밥","🍲 김치찌개","🥘 된장찌개","🥩 제육볶음","🥓 삼겹살",
+        "🍜 냉면","🍲 순두부찌개","🍜 칼국수","🍗 닭갈비","🥩 불고기"
+    ],
+
+    "🍝 양식":[
+        "🍕 피자","🍝 파스타","🍔 햄버거","🥩 스테이크","🥘 리소토",
+        "🥗 샐러드","🍳 오므라이스","🍝 라자냐","🦐 감바스","🥪 브런치"
+    ],
+
+    "🍣 일식":[
+        "🍣 초밥","🍜 라멘","🍜 우동","🥩 돈까스","🍚 규동",
+        "🍛 카레","🥞 오코노미야키","🍜 소바","🍤 텐동","🐟 사시미"
+    ],
+
+    "🥟 중식":[
+        "🍜 짜장면","🌶️ 짬뽕","🍲 마라탕","🥩 탕수육","🥘 마라샹궈",
+        "🥟 딤섬","🍚 볶음밥","🥘 유산슬","🍗 깐풍기","🥗 양장피"
+    ],
+
+    "🍰 디저트":[
+        "🍰 케이크","🧇 와플","🥐 크로플","🍬 마카롱","🧋 버블티",
+        "🍧 빙수","🍨 아이스크림","🍩 도넛","🥨 츄러스","🍪 쿠키"
+    ]
+}
+
+# ---------------- 화면 ----------------
+
+st.markdown('<p class="title">🎡 오늘 뭐 먹지?</p>', unsafe_allow_html=True)
+
+st.markdown(
+'<p class="sub">버튼을 눌러 룰렛을 돌려보세요! 🍽️💕</p>',
+unsafe_allow_html=True
+)
+
+category = st.selectbox(
+    "🍴 음식 종류 선택",
+    ["🎲 전체 랜덤"] + list(foods.keys())
+)
+
+st.write("")
+
+if st.button("🎡 룰렛 돌리기!"):
+
+    if category == "🎲 전체 랜덤":
+        menu_list = []
+        for value in foods.values():
+            menu_list.extend(value)
+    else:
+        menu_list = foods[category]
+
+    roulette = st.empty()
+
+    # 룰렛처럼 빠르게 바뀌기
+    for _ in range(25):
+        roulette.markdown(
+            f"<h1 style='text-align:center;font-size:60px;'>{random.choice(menu_list)}</h1>",
+            unsafe_allow_html=True
+        )
+        time.sleep(0.08)
+
+    result = random.choice(menu_list)
+
+    st.balloons()
+
+    roulette.markdown(
+        f"""
+        <div class="result">
+        <h1>🎉 오늘의 메뉴 🎉</h1>
+        <h1 style="font-size:60px;">{result}</h1>
+        <h3>맛있게 드세요! 😋💖</h3>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    comments = [
+        "✨ 오늘은 이 메뉴가 행운의 음식이에요!",
+        "🍀 후회 없는 선택입니다!",
+        "😋 지금 당장 먹으러 가볼까요?",
+        "💖 오늘의 기분과 딱 어울리는 메뉴예요!",
+        "🎊 맛있는 식사로 행복한 하루 보내세요!"
+    ]
+
+    st.success(random.choice(comments))
+
+st.markdown("---")
+st.caption("💖 Made with Streamlit")
